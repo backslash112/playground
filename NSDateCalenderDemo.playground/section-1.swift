@@ -52,9 +52,9 @@ let todayComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear 
 
 list.insert(Work(time: NSDate()), atIndex: 0)
 
-for _ in 0...10 {
+for _ in 0...250 {
     todayComponents.day -= 1
-    todayComponents.hour -= 1
+    //todayComponents.hour -= 1
     //todayComponents.minute -= 1
     let newDate = NSCalendar.currentCalendar().dateFromComponents(todayComponents)!
 
@@ -157,32 +157,32 @@ endComponents.hour = 23
 endComponents.minute = 59
 startComponents.second = 59
 
-for i in 0...3 {
-   
-    
-    startComponents.day = startComponents.day - (i == 0 ? 0 : 1)
-    endComponents.day = startComponents.day
-
-
-    
-    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)
-    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
-    startDate
-    endDate
-    
-    let result = list.filter { $0.time.compare(startDate!) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
-    result
-    
-}
-
-
-
-//startComponents.day = startComponents.day - startComponents.weekday + 1 + 7
-//endComponents.day = endComponents.day - endComponents.weekday + 7 + 7 + 1
+//startComponents.day += 0
+//endComponents.day += 0
+//for i in 0...3 {
+//   
+//    
+//    startComponents.day = startComponents.day - (i == 0 ? 0 : 1)
+//    endComponents.day = startComponents.day
 //
-//println(startComponents.day)
-//println(endComponents.day)
 //
+//    
+//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)
+//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
+//    startDate
+//    endDate
+//    
+//    let result = list.filter { $0.time.compare(startDate!) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
+//    result
+//    
+//}
+
+
+
+//startComponents.day = startComponents.day - startComponents.weekday + 1// + 7
+//endComponents.day = endComponents.day - endComponents.weekday + 7 //+ 7
+
+
 //for _ in 0...3 {
 //    startComponents.day = startComponents.day - (1 * 7)
 //    endComponents.day = endComponents.day - (1 * 7)
@@ -194,6 +194,38 @@ for i in 0...3 {
 //    
 //    result
 //}
+
+//startComponents.day = startComponents.day - startComponents.weekday + 1// + 7
+//endComponents.day = endComponents.day - endComponents.weekday + 7 //+ 7
+
+//for i in 0...3 {
+//    startComponents.day = startComponents.day - ((i == 0 ? 0 : 1) * 7)
+//    endComponents.day = endComponents.day -     ((i == 0 ? 0 : 1) * 7)
+//    
+//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
+//    
+//    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
+//    
+//    result
+//}
+
+
+// ok
+//startComponents.day = startComponents.day - startComponents.weekday + 1
+//
+//for i in 0...3 {
+//    startComponents.day = startComponents.day - ((i == 0 ? 0 : 1) * 7)
+//    endComponents.day = startComponents.day + 6
+//    
+//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
+//    
+//    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
+//    
+//    result
+//}
+
 
 
 //startComponents.day = 1
@@ -212,3 +244,23 @@ for i in 0...3 {
 //
 //result
 //}
+
+startComponents.day = 1
+endComponents.day = 0
+
+for i in 0...3 {
+    startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
+    endComponents.month = startComponents.month + 1
+    
+    
+    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+    
+    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+    
+    result
+}
+
+
+
+
