@@ -48,14 +48,21 @@ class Work {
 }
 
 var list = [Work]()
-let todayComponents = NSCalendar.currentCalendar().components(NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitMonth | NSCalendarUnit.CalendarUnitYear, fromDate: NSDate())
-for _ in 0...150 {
+let todayComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond, fromDate: NSDate())
+
+list.insert(Work(time: NSDate()), atIndex: 0)
+
+for _ in 0...10 {
     todayComponents.day -= 1
+    todayComponents.hour -= 1
+    //todayComponents.minute -= 1
     let newDate = NSCalendar.currentCalendar().dateFromComponents(todayComponents)!
 
     list.insert(Work(time: newDate), atIndex: 0)
 }
 list
+
+//NSThread.sleepForTimeInterval(10)
 //
 //let result = list.filter { $0.time.compare(dateFormatter.dateFromString("2015-02-16 20:13:14")!) != NSComparisonResult.OrderedAscending }
 //
@@ -139,30 +146,35 @@ list
 //var result = list.filter { $0.time.compare(currentUnitDate) != NSComparisonResult.OrderedAscending }
 
 
-let startComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | .CalendarUnitDay, fromDate: NSDate())
+let startComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
 
-let endComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | .CalendarUnitDay, fromDate: NSDate())
+let endComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
 
-//endComponents.day += 1
-//for _ in 0...3 {
-//   
-//    
-//    startComponents.day = startComponents.day - 1
-//    endComponents.day = endComponents.day - 1
-//    
-//    println(startComponents.day)
-//    println(endComponents.day)
-//    
-//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)
-//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
-//    println(startDate)
-//    println(endDate)
-//    
-//    let result = list.filter { $0.time.compare(startDate!) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
-//
-//    result
-//    
-//}
+startComponents.hour = 0
+startComponents.minute = 0
+startComponents.second = 1
+endComponents.hour = 23
+endComponents.minute = 59
+startComponents.second = 59
+
+for i in 0...3 {
+   
+    
+    startComponents.day = startComponents.day - (i == 0 ? 0 : 1)
+    endComponents.day = startComponents.day
+
+
+    
+    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)
+    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
+    startDate
+    endDate
+    
+    let result = list.filter { $0.time.compare(startDate!) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
+    result
+    
+}
+
 
 
 //startComponents.day = startComponents.day - startComponents.weekday + 1 + 7
@@ -185,43 +197,18 @@ let endComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | 
 
 
 //startComponents.day = 1
-////endComponents.day = endComponents.month - 1
+//endComponents.day = 0
 //
-//println("start: month:\(startComponents.month) day:\(startComponents.day)")
-//println("end  : month:\(endComponents.month) day:\(endComponents.day)")
-
+//
 //for i in 0...3 {
-//    startComponents.month = startComponents.month - i == 0 ? 0 : 1
-//    endComponents.month = startComponents.month
-//    
-//    println("start: month:\(startComponents.month) day:\(startComponents.day)")
-//    println("end  : month:\(endComponents.month) day:\(endComponents.day)")
-//    
-//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
-//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)
+//startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
+//endComponents.month = startComponents.month + 1
 //
-//    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate!) != NSComparisonResult.OrderedDescending }
 //
-//    result
+//let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+//let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+//    
+//    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+//
+//result
 //}
-
-startComponents.day = 1
-endComponents.day = 0
-
-
-for i in 0...3 {
-//let i = 0
-startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
-endComponents.month = startComponents.month + 1
-
-
-println("start: month:\(startComponents.month) day:\(startComponents.day)")
-println("end  : month:\(endComponents.month) day:\(endComponents.day)")
-
-let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
-let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
-    
-    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
-
-result
-}
