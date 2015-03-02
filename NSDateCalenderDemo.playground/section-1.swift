@@ -2,8 +2,14 @@
 
 import UIKit
 
+/*
 var str = "Hello, playground"
 
+enum Type {
+    case Week, Month, Year
+}
+
+var selectedType = Type.Week
 
 func getDateTimeByTimeSpanType() -> NSDate {
     
@@ -146,6 +152,87 @@ list
 //var result = list.filter { $0.time.compare(currentUnitDate) != NSComparisonResult.OrderedAscending }
 
 
+func getListByType(type: Type) -> Array<Work>{
+    var works = [Work]()
+    
+    let startComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
+    
+    let endComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
+    
+    startComponents.hour = 0
+    startComponents.minute = 0
+    startComponents.second = 1
+    endComponents.hour = 23
+    endComponents.minute = 59
+    startComponents.second = 59
+    
+    switch type {
+    case .Week:
+        
+        for i in 0...3 {
+            startComponents.day = startComponents.day - (i == 0 ? 0 : 1)
+            endComponents.day = startComponents.day
+        
+            let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+            let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+        
+            //var result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+             var result = filterWorksByStartDate(startDate, andEndDate: endDate)!
+            result
+        }
+        
+        break
+        
+    case .Month:
+        // ok
+        startComponents.day = startComponents.day - startComponents.weekday + 1
+        
+        for i in 0...3 {
+            startComponents.day = startComponents.day - ((i == 0 ? 0 : 1) * 7)
+            endComponents.day = startComponents.day + 6
+        
+            let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+            let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+        
+//            var result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+             let result = filterWorksByStartDate(startDate, andEndDate: endDate)!
+            result
+        }
+        break
+        
+    case .Year:
+        
+        startComponents.day = 1
+        endComponents.day = 0
+        
+        for i in 0...3 {
+            startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
+            endComponents.month = startComponents.month + 1
+            
+            
+            let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+            let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+            
+            //var result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+             let result = filterWorksByStartDate(startDate, andEndDate: endDate)!
+            result
+        }
+        
+        break
+    }
+    
+    return works
+}
+
+func filterWorksByStartDate(startDate: NSDate, andEndDate endDate: NSDate) -> Array<Work>? {
+    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+    result
+    return result
+}
+
+getListByType(Type.Year)
+
+/*
 let startComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
 
 let endComponents = NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitWeekOfMonth | .CalendarUnitWeekday | NSCalendarUnit.CalendarUnitDay | NSCalendarUnit.CalendarUnitHour | NSCalendarUnit.CalendarUnitMinute | NSCalendarUnit.CalendarUnitSecond , fromDate: NSDate())
@@ -157,6 +244,7 @@ endComponents.hour = 23
 endComponents.minute = 59
 startComponents.second = 59
 
+*/
 //startComponents.day += 0
 //endComponents.day += 0
 //for i in 0...3 {
@@ -245,22 +333,74 @@ startComponents.second = 59
 //result
 //}
 
-startComponents.day = 1
-endComponents.day = 0
+// ok
+//startComponents.day = 1
+//endComponents.day = 0
+//
+//for i in 0...3 {
+//    startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
+//    endComponents.month = startComponents.month + 1
+//    
+//    
+//    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
+//    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
+//    
+//    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
+//    
+//    result
+//}
 
-for i in 0...3 {
-    startComponents.month = startComponents.month - (i == 0 ? 0 : 1)
-    endComponents.month = startComponents.month + 1
-    
-    
-    let startDate = NSCalendar.currentCalendar().dateFromComponents(startComponents)!
-    let endDate = NSCalendar.currentCalendar().dateFromComponents(endComponents)!
-    
-    let result = list.filter { $0.time.compare(startDate) != NSComparisonResult.OrderedAscending && $0.time.compare(endDate) != NSComparisonResult.OrderedDescending }
-    
-    result
+func getComponentsByDate(date: NSDate!) -> NSDateComponents! {
+    return NSCalendar.currentCalendar().components(.CalendarUnitYear | .CalendarUnitMonth | .CalendarUnitDay | .CalendarUnitWeekday | .CalendarUnitWeekOfMonth | .CalendarUnitHour | .CalendarUnitMinute | .CalendarUnitSecond, fromDate: date)
 }
 
+let dateFormatter = NSDateFormatter()
+dateFormatter.timeZone = NSTimeZone.systemTimeZone()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+let currentMonthDate = NSDate()
+let preMonthDate = dateFormatter.dateFromString("2015-01-05 12:22:31")!
 
+let currentMonthComponts = getComponentsByDate(currentMonthDate)
+let preMonthComponts = getComponentsByDate(preMonthDate)
+
+
+let differ =  preMonthComponts.month -  currentMonthComponts.month
+
+println("differ: \(differ)")
+println("differ: \(abs(differ))")
+
+*/
+
+let dateFormatter = NSDateFormatter()
+dateFormatter.timeZone = NSTimeZone.systemTimeZone()
+dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+let calendar = NSCalendar(calendarIdentifier: NSGregorianCalendar)!
+
+let date1 = dateFormatter.dateFromString("2015-03-02 12:12:12")!
+let date2 = dateFormatter.dateFromString("2015-03-03 12:12:11")!
+let result = NSCalendar.currentCalendar().components(NSCalendarUnit.DayCalendarUnit, fromDate: date1, toDate: date2, options: NSCalendarOptions.allZeros)
+let day = result.day
+
+let result2 = calendar.components(NSCalendarUnit.DayCalendarUnit, fromDate: date1, toDate: date2, options: nil)
+
+let day2 = result2.day
+
+
+
+func daysBetweenDateFromDate(date1: NSDate, toDate date2: NSDate) -> Int {
+    var fromDate: NSDate?
+    var toDate: NSDate?
+    var duration: NSTimeInterval = 0
+
+    let calendar = NSCalendar.currentCalendar()
+    
+    calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &fromDate, interval: &duration, forDate: date1)
+    calendar.rangeOfUnit(NSCalendarUnit.DayCalendarUnit, startDate: &toDate, interval: &duration, forDate: date2)
+    
+    let difference = calendar.components(NSCalendarUnit.DayCalendarUnit, fromDate: fromDate!, toDate: toDate!, options: nil)
+    return difference.day
+}
+
+let day3 = daysBetweenDateFromDate(date1, toDate: date2)
 
 
